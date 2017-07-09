@@ -54,6 +54,7 @@ body {
 }
 
 .button {
+    cursor: pointer;
     float: left;
     min-height: 50px;
     min-width: 100px;
