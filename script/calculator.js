@@ -1,44 +1,53 @@
 function calculator() {
-    var digits, isDot, operator, textToDisplayX, textToDisplayY;
+    var 
+    counter,
+    digits,
+    ids,
+    tags,
+    textToDisplay;
 
-    digits = [1, 2, 3,4,5,6,7,8,9,0];
-    isDot = false;
-    operator = false;
-    textToDisplayX = "";
-    textToDisplayY = "";
+    digits = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+    ids = {
+        'clear': 'clear',
+        'digit': 'digit-',
+        'display': 'display'
+    };
+    markers = {
+        'click': 'click',
+        'key': 'keydown'
+    };
+    tags = {
+        'spanX': '</span>',
+        'spanO': '<span>'
+    };
+    textToDisplay = "";
 
-    for (var i = 0; i < digits.length; i++) {
-        document.getElementById('digit-' + digits[i]).addEventListener('click', clickDigit);
-        document.getElementById('digit-' + digits[i]).addEventListener('keydown', pushDigit);
-    }
-    
-    document.getElementById('digit-dot').addEventListener('click', pushDot);
-    //document.getElementById('digit-dot').addEventListener('click', pushDot);
-
-    function clickDigit() {
-        if (this.id === 'digit-0' && (textToDisplayX === "" || textToDisplayX === "0")) {
-            textToDisplayX = "0";
-        } else {
-            if (textToDisplayX.length > 0 && textToDisplayX[0] === '0' && textToDisplayX[1] != '.') {
-                textToDisplayX = textToDisplayX.slice(1, textToDisplayX.length);
-            }
-
-            textToDisplayX += parseInt(this.id[6]);
+    function setEvents () {
+        for (counter = 0; counter < digits.length; counter++) {
+            document.getElementById(ids.digit + digits[counter]).
+                addEventListener(markers.click, digitEvent);
+            document.getElementById(ids.digit + digits[counter]).
+                addEventListener(markers.markerKey, digitEvent);
         }
 
-        document.getElementById('display').innerHTML = '<span>' + textToDisplayX + '</span>';
+        document.getElementById(ids.clear).addEventListener(markers.click, clearEvent);
     }
 
-    function pushDigit() {
-        console.log('for keyboard events');
+    function digitEvent () {
+        textToDisplay += parseInt(this.id[6]);
+        document.getElementById(ids.display).innerHTML = tags.spanO + textToDisplay + tags.spanX;
+        
+        return textToDisplay;
     }
 
-    function pushDot() {
-        isDot = true;
-        textToDisplayX += '.';
-        document.getElementById('display').innerHTML = '<span>' + textToDisplayX + '</span>';
-        document.getElementById('digit-dot').removeEventListener('click', pushDot);
+    function clearEvent () {
+        textToDisplay = "";
+        document.getElementById(ids.display).innerHTML = tags.spanO + textToDisplay + tags.spanX;
+
+        return textToDisplay;
     }
+
+    setEvents();
 }
 
 calculator();
